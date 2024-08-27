@@ -1,0 +1,84 @@
+<div id="background">
+  <img draggable='false' src="/background.jpg" alt="background">
+</div>
+
+<div id="instructions">
+  <button (click)="showInstructions()">
+    <img draggable='false' src="/info.svg" alt="info">
+  </button>
+  <div id="instructionsContent" style="display: none;">
+    <h3>Istruzioni:</h3>
+    <ol>
+      <li>Selezionare il tipo di contenuto (film o serie tv)</li>
+      <li>Digitare il titolo del primo film/serie tv</li>
+      <li>Premere il tasto "invio" per iniziare la ricerca</li>
+      <li>Cliccare il film o la serie tv desiderata dalla lista che compare</li>
+      <li>Ripetere per il secondo campo</li>
+      <li>Dopodiché verrà visualizzata la lista degli attori che hanno recitato in entrambi i film/serie tv</li>
+    </ol>
+    <b>N.B.: i titoli dei film e delle serie tv sono solo in inglese!</b>
+  </div>
+</div>
+
+<main class="main">
+  <div class="content">
+    <div class="left-side">
+      <ul class="type">
+        <li><input type="radio" name="item1type" value="Movie" [(ngModel)]="item1type" (click)="selectType($event)">Film</li>
+        <li><input type="radio" name="item1type" value="Serie" [(ngModel)]="item1type" (click)="selectType($event)">Serie TV</li>
+      </ul>
+      <input type="text" id="item1" [(ngModel)]="item1" (focusout)="findItem1()" (keypress)="checkPressedEnter($event)" (click)="showList('ul1')">
+      <p id="warning1" style="display: none;">Selezionare "Film" o "Serie TV"!</p>
+      <ul id="ul1" style="display: none;">
+        <li *ngFor="let result of result1" (click)="selectItem($event, result.id)" id="listItem1">{{result.title}}  -  {{result.releaseYear}}</li>
+      </ul>
+      <div *ngIf="selectedItem1 != undefined" class="selectedItem">
+        <h3>{{selectedItem1.title}}</h3>
+        <img draggable='false' [src]="selectedItem1.image" [alt]="selectedItem1.title">
+      </div>
+    </div>
+
+    <div class="right-side">
+      <ul class="type">
+        <li><input type="radio" name="item2type" value="Movie" [(ngModel)]="item2type" (click)="selectType($event)">Film</li>
+        <li><input type="radio" name="item2type" value="Serie" [(ngModel)]="item2type" (click)="selectType($event)">Serie TV</li>
+      </ul>
+      <input type="text" id="item2" [(ngModel)]="item2" (focusout)="findItem2()" (keypress)="checkPressedEnter($event)" (click)="showList('ul2')">
+      <p id="warning2" style="display: none;">Selezionare "Film" o "Serie TV"!</p>
+      <ul id="ul2" style="display: none;">
+        <li *ngFor="let result of result2" (click)="selectItem($event, result.id)" id="listItem2">{{result.title}}  -  {{result.releaseYear}}</li>
+      </ul>
+      <div *ngIf="selectedItem2 != undefined" class="selectedItem">
+        <h3>{{selectedItem2.title}}</h3>
+        <img draggable='false' [src]="selectedItem2.image" [alt]="selectedItem2.title">
+      </div>
+    </div>
+  </div>
+</main>
+
+<div class="content bottom column">
+  <div class="column" *ngIf="actorNumber != undefined">
+    <div>
+      <h2>Attori in comune:</h2>
+    </div>
+    <div>
+      <h1>{{actorNumber}}</h1>
+    </div>
+  </div>
+  <div class="row" *ngIf="castOverlap.length != 0" id="actors">
+    <div *ngFor="let actor of castOverlap" class="actor">
+      <div>
+        <h2>{{actor.name}}</h2>
+        <img draggable='false' [src]="actor.image" [alt]="actor.name" style="height: 200px;">
+      </div>
+      <div>
+        <h2>{{selectedItem1.title}}:</h2>
+        <p>{{actor.character1}}</p>
+        <h2>{{selectedItem2.title}}:</h2>
+        <p>{{actor.character2}}</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<router-outlet />
