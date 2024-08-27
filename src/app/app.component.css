@@ -147,6 +147,15 @@ h1 {
       width: 32px;
       height: 32px;
     }
+
+    .content {
+      width: 100vw;
+    }
+
+    .content .left-side,
+    .content .right-side {
+      margin: 30px auto;
+    }
   }
 
 * {
